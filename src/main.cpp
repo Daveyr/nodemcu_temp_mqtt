@@ -10,6 +10,7 @@ char ssid_password[] = secret_ssid_password;
 char mqtt_server[] = secret_mqtt_server;
 char mqtt_user[] = secret_mqtt_user;
 char mqtt_password[] = secret_mqtt_password;
+const char* topic = "room_temperature";
 
 // Example
 // Update these with values suitable for your network.
@@ -41,7 +42,7 @@ void reconnect() {
     if (client.connect("arduinoClient", mqtt_user, mqtt_password)) {
       Serial.println("connected");
       // Once connected, publish an announcement...
-      client.publish("outTopic","hello world");
+      client.publish(topic,"hello world");
       // ... and resubscribe
       client.subscribe("inTopic");
     } else {
