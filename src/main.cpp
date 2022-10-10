@@ -2,9 +2,12 @@
 #include <PubSubClient.h>
 #include "WiFi.h"
 #include <arduino_secrets.h>
+#include <OneWire.h>
+#include <DallasTemperature.h>
 
 // params
 #define led_pin 2
+#define temp_pin 3
 char ssid[] = secret_ssid;
 char ssid_password[] = secret_ssid_password;
 char mqtt_server[] = secret_mqtt_server;
