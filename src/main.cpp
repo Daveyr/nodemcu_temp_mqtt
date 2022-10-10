@@ -53,7 +53,7 @@ void reconnect()
       // Once connected, publish an announcement...
       client.publish(topic, "hello world");
       // ... and resubscribe
-      // client.subscribe("inTopic");
+      client.subscribe("inTopic");
     }
     else
     {
@@ -89,9 +89,9 @@ void setup()
   Serial.println(WiFi.localIP());
 
   // Pubsub example
-  //client.setClient(wifiClient);
-  //client.setServer(secret_mqtt_server, 1883);
-  //client.setCallback(callback);
+  client.setClient(wifiClient);
+  client.setServer(secret_mqtt_server, 1883);
+  client.setCallback(callback);
   // Allow the hardware to sort itself out
   delay(1500);
 }
@@ -109,13 +109,13 @@ void loop()
   delay(500);
   digitalWrite(led_pin, LOW);
   delay(1500);
-  //if (!client.connected())
-  //{
-  //  reconnect();
-  //}
-  //client.loop();
+  if (!client.connected())
+  {
+   reconnect();
+  }
+  client.loop();
   randNumber = random(10, 21);
-  dtostrf(randNumber, 2, 2, msg_out);
-  //client.publish(topic, msg_out);
+  dtostrf(temp, 2, 2, msg_out);
+  client.publish(topic, msg_out);
   Serial.println(msg_out);
 }
