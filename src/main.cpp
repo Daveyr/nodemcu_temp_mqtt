@@ -8,6 +8,7 @@
 // params
 #define led_pin 2
 #define oneWireBus 23
+int sample_interval = 5000;
 float temp = 0.0;
 char ssid[] = secret_ssid;
 char ssid_password[] = secret_ssid_password;
@@ -108,7 +109,6 @@ void loop()
   Serial.println(temp);
   delay(500);
   digitalWrite(led_pin, LOW);
-  delay(1500);
   if (!client.connected())
   {
    reconnect();
@@ -117,4 +117,5 @@ void loop()
   // randNumber = random(10, 21);
   dtostrf(temp, 2, 2, msg_out);
   client.publish(topic, msg_out);
+  delay(sample_interval);
 }
