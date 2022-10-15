@@ -15,7 +15,7 @@ char mqtt_server[] = secret_mqtt_server;
 char mqtt_user[] = secret_mqtt_user;
 char mqtt_password[] = secret_mqtt_password;
 const char* topic = "room_temperature";
-double randNumber;
+// double randNumber;
 char msg_out[20];
 
 // One Wire device initialisation
@@ -114,8 +114,7 @@ void loop()
    reconnect();
   }
   client.loop();
-  randNumber = random(10, 21);
+  // randNumber = random(10, 21);
   dtostrf(temp, 2, 2, msg_out);
   client.publish(topic, msg_out);
-  Serial.println(msg_out);
 }
