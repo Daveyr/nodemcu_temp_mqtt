@@ -3,7 +3,7 @@
 .vscode/c_cpp_properties.json
 .vscode/launch.json
 .vscode/ipch
-arduino_secrets.h
-arduino_secrets_adafruit.h
-arduino_secrets_shhm.h
-arduino_secrets_home.h
+src/arduino_secrets.h
+src/arduino_secrets_shhm.h
+src/arduino_secrets_home.h
+src/arduino_secrets adafruit.h
