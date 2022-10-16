@@ -4,5 +4,6 @@
 .vscode/launch.json
 .vscode/ipch
 arduino_secrets.h
+arduino_secrets_adafruit.h
 arduino_secrets_shhm.h
 arduino_secrets_home.h
