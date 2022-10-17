@@ -5,6 +5,9 @@
 #include <OneWire.h>
 #include <DallasTemperature.h>
 
+// Prototype Functions
+void reconnect(PubSubClient, char *, char *);
+
 // params
 #define led_pin 2
 #define oneWireBus 23
@@ -41,14 +44,14 @@ void callback(char *topic, byte *payload, unsigned int length)
   Serial.println();
 }
 
-void reconnect()
+void reconnect(PubSubClient mqtt_client, char *username, char *password)
 {
   // Loop until we're reconnected
-  while (!pubsub_client.connected())
+  while (!mqtt_client.connected())
   {
     Serial.print("Attempting MQTT connection...");
     // Attempt to connect
-    if (pubsub_client.connect("arduinoClient", mqtt_user, mqtt_password))
+    if (mqtt_client.connect("arduinoClient", username, password))
     {
       Serial.println("connected");
       // Once connected, publish an announcement...
@@ -59,7 +62,7 @@ void reconnect()
     else
     {
       Serial.print("failed, rc=");
-      Serial.print(pubsub_client.state());
+      Serial.print(mqtt_client.state());
       Serial.println(" try again in 5 seconds");
       // Wait 5 seconds before retrying
       delay(5000);
@@ -111,7 +114,7 @@ void loop()
   digitalWrite(led_pin, LOW);
   if (!pubsub_client.connected())
   {
-   reconnect();
+   reconnect(pubsub_client, mqtt_user, mqtt_password);
   }
   pubsub_client.loop();
   // randNumber = random(10, 21);
