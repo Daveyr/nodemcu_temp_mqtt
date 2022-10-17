@@ -15,7 +15,7 @@ char ssid_password[] = secret_ssid_password;
 char mqtt_server[] = secret_mqtt_server;
 char mqtt_user[] = secret_mqtt_user;
 char mqtt_password[] = secret_mqtt_password;
-const char* topic = "room_temperature";
+const char* topic = "unearthed/feeds/room-temperature";
 // double randNumber;
 char msg_out[20];
 
@@ -25,7 +25,7 @@ DallasTemperature sensors(&oneWire);
 
 // Wifi initialisation
 WiFiClient wifiClient;
-PubSubClient client;
+PubSubClient pubsub_client;
 
 // Functions
 
@@ -44,22 +44,22 @@ void callback(char *topic, byte *payload, unsigned int length)
 void reconnect()
 {
   // Loop until we're reconnected
-  while (!client.connected())
+  while (!pubsub_client.connected())
   {
     Serial.print("Attempting MQTT connection...");
     // Attempt to connect
-    if (client.connect("arduinoClient", mqtt_user, mqtt_password))
+    if (pubsub_client.connect("arduinoClient", mqtt_user, mqtt_password))
     {
       Serial.println("connected");
       // Once connected, publish an announcement...
-      client.publish(topic, "hello world");
+      // pubsub_client.publish(topic, "hello world");
       // ... and resubscribe
-      client.subscribe("inTopic");
+      // pubsub_client.subscribe("inTopic");
     }
     else
     {
       Serial.print("failed, rc=");
-      Serial.print(client.state());
+      Serial.print(pubsub_client.state());
       Serial.println(" try again in 5 seconds");
       // Wait 5 seconds before retrying
       delay(5000);
@@ -90,9 +90,9 @@ void setup()
   Serial.println(WiFi.localIP());
 
   // Pubsub example
-  client.setClient(wifiClient);
-  client.setServer(secret_mqtt_server, 1883);
-  client.setCallback(callback);
+  pubsub_client.setClient(wifiClient);
+  pubsub_client.setServer(secret_mqtt_server, 1883);
+  pubsub_client.setCallback(callback);
   // Allow the hardware to sort itself out
   delay(1500);
 }
@@ -109,13 +109,13 @@ void loop()
   Serial.println(temp);
   delay(500);
   digitalWrite(led_pin, LOW);
-  if (!client.connected())
+  if (!pubsub_client.connected())
   {
    reconnect();
   }
-  client.loop();
+  pubsub_client.loop();
   // randNumber = random(10, 21);
   dtostrf(temp, 2, 2, msg_out);
-  client.publish(topic, msg_out);
+  pubsub_client.publish(topic, msg_out);
   delay(sample_interval);
 }
