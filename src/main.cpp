@@ -30,7 +30,7 @@ WiFiClient wifiClient;
 // MQTT initialisation
 PubSubClient client;
 // Adafruit IO initialisation
-AdafruitIO io(IO_USERNAME, IO_KEY);
+AdafruitIO_Wifi io(IO_USERNAME, IO_KEY);
 
 // Functions
 
