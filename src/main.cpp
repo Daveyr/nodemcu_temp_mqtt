@@ -7,7 +7,7 @@
 #include <DallasTemperature.h>
 
 // Prototype Functions
-void reconnect(PubSubClient, char *, char *);
+void reconnect();
 
 // params
 #define led_pin 2
@@ -39,20 +39,19 @@ PubSubClient pubsub_client;
 
 // Functions
 
-void callback(char *topic, byte *payload, unsigned int length)
-{
-  Serial.print("Message arrived [");
-  Serial.print(topic);
-  Serial.print("] ");
-  for (int i = 0; i < length; i++)
-  {
-    Serial.print((char)payload[i]);
-  }
-  Serial.println();
-}
+// void callback(char *topic, byte *payload, unsigned int length)
+// {
+//   Serial.print("Message arrived [");
+//   Serial.print(topic);
+//   Serial.print("] ");
+//   for (int i = 0; i < length; i++)
+//   {
+//     Serial.print((char)payload[i]);
+//   }
+//   Serial.println();
+// }
 
-void reconnect(PubSubClient mqtt_client, char *username, char *password)
-{
+void reconnect(PubSubClient &mqtt_client, char *username, char *password) throw() {
   // Loop until we're reconnected
   while (!mqtt_client.connected())
   {
@@ -62,9 +61,9 @@ void reconnect(PubSubClient mqtt_client, char *username, char *password)
     {
       Serial.println("connected");
       // Once connected, publish an announcement...
-      // pubsub_client.publish(topic, "hello world");
+      // mqtt_client.publish(topic, "hello world");
       // ... and resubscribe
-      // pubsub_client.subscribe("inTopic");
+      // mqtt_client.subscribe("inTopic");
     }
     else
     {
@@ -101,13 +100,12 @@ void setup()
 
   // Pubsub main client
   pubsub_client.setClient(wifiClient);
-  pubsub_client.setServer(secret_mqtt_server, 1883);
-  pubsub_client.setCallback(callback);
+  pubsub_client.setServer(mqtt_server, 1883);
+  // pubsub_client.setCallback(callback);
 
   // Adafruit IO pubsub client
   // pubsub_io_client.setClient(wifiClient);
   // pubsub_io_client.setServer(io_server, 1883);
-  // pubsub_io_client.setCallback(callback);
 
   // Allow the hardware to sort itself out
   delay(1500);
@@ -127,7 +125,8 @@ void loop()
   digitalWrite(led_pin, LOW);
   if (!pubsub_client.connected())
   {
-   reconnect(pubsub_client, mqtt_user, mqtt_password);
+    Serial.println("Not yet connected");
+    reconnect(pubsub_client, mqtt_user, mqtt_password);
   }
   pubsub_client.loop();
   
