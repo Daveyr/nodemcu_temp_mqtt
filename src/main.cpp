@@ -2,7 +2,7 @@
 #include <PubSubClient.h>
 #include "WiFi.h"
 #include <arduino_secrets.h>
-// #include <arduino_secrets_adafruit.h>
+#include <arduino_secrets_adafruit.h>
 #include <OneWire.h>
 #include <DallasTemperature.h>
 
@@ -21,9 +21,9 @@ char mqtt_user[] = secret_mqtt_user;
 char mqtt_password[] = secret_mqtt_password;
 const char* topic = "unearthed/feeds/room-temperature";
 
-// char io_server[] = secret_io_server;
-// char io_user[] = secret_io_user;
-// char io_password[] = secret_io_password;
+char io_server[] = secret_io_server;
+char io_user[] = secret_io_user;
+char io_password[] = secret_io_password;
 
 // double randNumber;
 char msg_out[20];
@@ -35,7 +35,7 @@ DallasTemperature sensors(&oneWire);
 // Wifi initialisation
 WiFiClient wifiClient;
 PubSubClient pubsub_client;
-// PubSubClient pubsub_io_client;
+PubSubClient pubsub_io_client;
 
 // Functions
 
@@ -104,8 +104,8 @@ void setup()
   // pubsub_client.setCallback(callback);
 
   // Adafruit IO pubsub client
-  // pubsub_io_client.setClient(wifiClient);
-  // pubsub_io_client.setServer(io_server, 1883);
+  pubsub_io_client.setClient(wifiClient);
+  pubsub_io_client.setServer(io_server, 1883);
 
   // Allow the hardware to sort itself out
   delay(1500);
@@ -130,15 +130,15 @@ void loop()
   }
   pubsub_client.loop();
   
-  // if (!pubsub_io_client.connected())
-  // {
-  //  reconnect(pubsub_io_client, io_user, io_password);
-  // }
-  // pubsub_io_client.loop();
+  if (!pubsub_io_client.connected())
+  {
+   reconnect(pubsub_io_client, io_user, io_password);
+  }
+  pubsub_io_client.loop();
 
   // randNumber = random(10, 21);
   dtostrf(temp, 2, 2, msg_out);
   pubsub_client.publish(topic, msg_out);
-  // pubsub_io_client.publish(topic, msg_out);
+  pubsub_io_client.publish(topic, msg_out);
   delay(sample_interval);
 }
