@@ -11,8 +11,8 @@ void reconnect();
 
 // params
 #define led_pin 2
-#define oneWireBus 23
-int sample_interval = 5000;
+#define oneWireBus 4
+int sample_interval = 60000;
 float temp = 0.0;
 char ssid[] = secret_ssid;
 char ssid_password[] = secret_ssid_password;
