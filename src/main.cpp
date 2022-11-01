@@ -22,7 +22,7 @@ char mqtt_password[] = secret_mqtt_password;
 char io_server[] = secret_io_server;
 char io_user[] = secret_io_user;
 char io_password[] = secret_io_password;
-char feedname[] = "/feeds/room-temperature"; // in setup() we concatenate the io_user with thefeedname
+char feedname[] = "/feeds/room_temperature"; // in setup() we concatenate the io_user with thefeedname
 char topic[30];
 
 // double randNumber;
@@ -103,8 +103,8 @@ void setup()
   // pubsub_client.setCallback(callback);
 
   // Adafruit IO pubsub client
-  pubsub_io_client.setClient(wifiClient);
-  pubsub_io_client.setServer(io_server, 1883);
+  // pubsub_io_client.setClient(wifiClient);
+  // pubsub_io_client.setServer(io_server, 1883);
 
   // Allow the hardware to sort itself out
   delay(1500);
@@ -132,15 +132,15 @@ void loop()
   }
   pubsub_client.loop();
   
-  if (!pubsub_io_client.connected())
-  {
-   reconnect(pubsub_io_client, io_user, io_password);
-  }
-  pubsub_io_client.loop();
+  // if (!pubsub_io_client.connected())
+  // {
+  //  reconnect(pubsub_io_client, io_user, io_password);
+  // }
+  // pubsub_io_client.loop();
 
   // randNumber = random(10, 21);
   dtostrf(temp, 2, 2, msg_out); // Replace with randNumber if testing without hardware
   pubsub_client.publish(topic, msg_out);
-  pubsub_io_client.publish(topic, msg_out);
+  // pubsub_io_client.publish(topic, msg_out);
   delay(sample_interval);
 }
