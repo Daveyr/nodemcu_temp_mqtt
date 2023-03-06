@@ -7,7 +7,7 @@
 
 // params
 #define led_pin 2
-#define oneWireBus 23
+#define oneWireBus 4
 int sample_interval = 5000;
 float temp = 0.0;
 char ssid[] = secret_ssid;
