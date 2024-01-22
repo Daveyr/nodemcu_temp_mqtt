@@ -3,6 +3,10 @@
 		{
 			"name": "nodemcu_temp_mqtt",
 			"path": "."
+		},
+		{
+			"name": "D1 serial test",
+			"path": "../../Documents/PlatformIO/Projects/D1 serial test"
 		}
 	],
 	"settings": {}

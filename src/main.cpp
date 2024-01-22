@@ -1,13 +1,13 @@
 #include <Arduino.h>
 #include <PubSubClient.h>
-#include "WiFi.h"
-#include <arduino_secrets.h>
+#include "ESP8266WiFi.h"
+#include <arduino_secrets_shhm.h>
 #include <OneWire.h>
 #include <DallasTemperature.h>
 
 // params
-#define led_pin 2
-#define oneWireBus 4
+// #define led_pin 4
+#define oneWireBus 2
 int sample_interval = 5000;
 float temp = 0.0;
 char ssid[] = secret_ssid;
@@ -29,7 +29,7 @@ PubSubClient client;
 
 // Functions
 
-void callback(char *topic, byte *payload, unsigned int length)
+void callback(char *topic, byte *payload, int length)
 {
   Serial.print("Message arrived [");
   Serial.print(topic);
@@ -74,8 +74,9 @@ void setup()
   // Random number generation for testing only
   randomSeed(analogRead(0));
 
-  pinMode(led_pin, OUTPUT);
+  // pinMode(led_pin, OUTPUT);
   Serial.begin(9600);
+  Serial.print("Starting...");
   WiFi.begin(ssid, ssid_password);
   while (WiFi.status() != WL_CONNECTED)
   {
@@ -100,7 +101,7 @@ void setup()
 void loop()
 {
   // put your main code here, to run repeatedly:
-  digitalWrite(led_pin, HIGH);
+  // digitalWrite(led_pin, HIGH);
 
   // Temperature readings
   sensors.requestTemperatures();
@@ -108,7 +109,7 @@ void loop()
   Serial.print("Temperature is: ");
   Serial.println(temp);
   delay(500);
-  digitalWrite(led_pin, LOW);
+  // digitalWrite(led_pin, LOW);
   if (!client.connected())
   {
    reconnect();
